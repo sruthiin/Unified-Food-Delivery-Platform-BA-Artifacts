@@ -1,33 +1,152 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "CustomerOrderInitializationContract",
-  "description": "Defines the system input requirement schema for initializing a secure checkout transaction flow.",
+  "title": "Order Placement API Contract",
+  "description": "Defines the request/response schema for customer order placement and checkout initiation.",
   "type": "object",
-  "required": ["customer_id", "restaurant_id", "cart_summary", "routing_coordinates"],
+  "required": ["customer_id", "restaurant_id", "cart_items", "delivery_location"],
   "properties": {
     "customer_id": {
       "type": "string",
+      "description": "Unique identifier for the customer placing the order",
       "example": "CUST-99482"
     },
     "restaurant_id": {
       "type": "string",
+      "description": "Unique identifier for the restaurant fulfilling the order",
       "example": "REST-CHAI-01"
     },
-    "cart_summary": {
-      "type": "object",
-      "properties": {
-        "items_count": { "type": "integer", "example": 3 },
-        "basket_gross_value": { "type": "number", "example": 450.00 },
-        "tax_split_charges": { "type": "number", "example": 22.50 }
-      },
-      "required": ["items_count", "basket_gross_value"]
-    },
-    "routing_coordinates": {
+    "cart_items": {
       "type": "array",
+      "description": "List of items being ordered",
+      "minItems": 1,
       "items": {
-        "type": "number"
-      },
-      "example": [13.0827, 80.2707]
+        "type": "object",
+        "required": ["item_id", "quantity", "unit_price"],
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Unique menu item identifier",
+            "example": "ITEM-BIRYANI-001"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Number of units ordered",
+            "minimum": 1,
+            "example": 2
+          },
+          "unit_price": {
+            "type": "number",
+            "description": "Price per unit in INR",
+            "minimum": 0,
+            "example": 250.00
+          }
+        }
+      }
+    },
+    "order_summary": {
+      "type": "object",
+      "description": "Financial breakdown of the order",
+      "required": ["subtotal", "total_amount"],
+      "properties": {
+        "subtotal": {
+          "type": "number",
+          "description": "Sum of all item prices (excluding tax and fees)",
+          "minimum": 0,
+          "example": 500.00
+        },
+        "tax_amount": {
+          "type": "number",
+          "description": "Tax calculated on subtotal (usually 5-18% based on item)",
+          "minimum": 0,
+          "example": 50.00
+        },
+        "delivery_fee": {
+          "type": "number",
+          "description": "Delivery charges based on distance and restaurant",
+          "minimum": 0,
+          "example": 40.00
+        },
+        "discount_amount": {
+          "type": "number",
+          "description": "Any applied coupons or promotional discounts",
+          "minimum": 0,
+          "example": 0.00
+        },
+        "total_amount": {
+          "type": "number",
+          "description": "Final amount to be paid (subtotal + tax + delivery - discount)",
+          "minimum": 0,
+          "example": 590.00
+        }
+      }
+    },
+    "delivery_location": {
+      "type": "object",
+      "description": "Customer delivery address with geolocation",
+      "required": ["address", "latitude", "longitude"],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Complete delivery address including apartment/building number",
+          "example": "123 Main Street, Apartment 4B, Chennai, 600001"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Geographic latitude coordinate (range: -90 to 90)",
+          "minimum": -90,
+          "maximum": 90,
+          "example": 13.0827
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Geographic longitude coordinate (range: -180 to 180)",
+          "minimum": -180,
+          "maximum": 180,
+          "example": 80.2707
+        }
+      }
+    },
+    "special_instructions": {
+      "type": "string",
+      "description": "Special delivery or food preparation instructions for restaurant/delivery partner",
+      "maxLength": 500,
+      "example": "Ring doorbell twice. Do not use elevator. Extra sauce on the side."
+    },
+    "scheduled_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional scheduled delivery time (ISO 8601 format). Omit for immediate delivery.",
+      "example": "2026-06-09T19:00:00Z"
     }
+  },
+  "example": {
+    "customer_id": "CUST-99482",
+    "restaurant_id": "REST-CHAI-01",
+    "cart_items": [
+      {
+        "item_id": "ITEM-BIRYANI-001",
+        "quantity": 2,
+        "unit_price": 250.00
+      },
+      {
+        "item_id": "ITEM-RAITA-002",
+        "quantity": 1,
+        "unit_price": 50.00
+      }
+    ],
+    "order_summary": {
+      "subtotal": 550.00,
+      "tax_amount": 55.00,
+      "delivery_fee": 40.00,
+      "discount_amount": 0.00,
+      "total_amount": 645.00
+    },
+    "delivery_location": {
+      "address": "123 Main Street, Apartment 4B, Chennai, 600001",
+      "latitude": 13.0827,
+      "longitude": 80.2707
+    },
+    "special_instructions": "Ring doorbell twice. Extra sauce on the side.",
+    "scheduled_time": null
   }
 }
