@@ -1,19 +1,91 @@
 {
-  "title": "PaymentGatewayClearingWebhookContract",
-  "description": "Models the secure data payload incoming from third-party payment rails (UPI/Card Processors) on clearing.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Payment Gateway Webhook Contract",
+  "description": "Defines the payload structure received from payment gateways (UPI, Card processors) on transaction completion or failure.",
   "type": "object",
-  "required": ["transaction_id", "order_id", "gateway_status_flag", "payout_distribution_ledger"],
+  "required": ["transaction_id", "order_id", "status", "amount", "timestamp"],
   "properties": {
-    "transaction_id": { "type": "string", "example": "TXN-UPI-FOOD-99481A" },
-    "order_id": { "type": "string", "example": "ORD-2026-88102" },
-    "gateway_status_flag": { "type": "string", "example": "SUCCESS" },
-    "payout_distribution_ledger": {
+    "transaction_id": {
+      "type": "string",
+      "description": "Unique transaction identifier from payment gateway",
+      "example": "TXN-UPI-FOOD-99481A"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Corresponding order ID in the food delivery system",
+      "example": "ORD-2026-88102"
+    },
+    "status": {
+      "type": "string",
+      "description": "Payment transaction status",
+      "enum": ["SUCCESS", "FAILED", "PENDING", "CANCELLED"],
+      "example": "SUCCESS"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in INR",
+      "minimum": 0,
+      "example": 590.00
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of transaction",
+      "example": "2026-06-09T14:30:00Z"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "Payment method used",
+      "enum": ["UPI", "CREDIT_CARD", "DEBIT_CARD", "WALLET", "NET_BANKING"],
+      "example": "UPI"
+    },
+    "gateway_reference": {
+      "type": "string",
+      "description": "Payment gateway's internal reference code",
+      "example": "GATEWAY-REF-2026-001"
+    },
+    "failure_reason": {
+      "type": "string",
+      "description": "Reason for failure (only if status is FAILED)",
+      "example": "Insufficient funds",
+      "nullable": true
+    },
+    "revenue_distribution": {
       "type": "object",
+      "description": "Breakdown of how the payment amount is distributed",
+      "required": ["platform_fee", "merchant_payout", "delivery_partner_earnings"],
       "properties": {
-        "calculated_platform_revenue": { "type": "number", "example": 45.00 },
-        "calculated_merchant_payable": { "type": "number", "example": 355.00 },
-        "calculated_logistics_partner_earnings": { "type": "number", "example": 50.00 }
+        "platform_fee": {
+          "type": "number",
+          "description": "Amount retained by the platform",
+          "example": 45.00
+        },
+        "merchant_payout": {
+          "type": "number",
+          "description": "Amount payable to restaurant",
+          "example": 500.00
+        },
+        "delivery_partner_earnings": {
+          "type": "number",
+          "description": "Amount payable to delivery partner",
+          "example": 45.00
+        }
       }
+    }
+  },
+  "example": {
+    "transaction_id": "TXN-UPI-FOOD-99481A",
+    "order_id": "ORD-2026-88102",
+    "status": "SUCCESS",
+    "amount": 590.00,
+    "timestamp": "2026-06-09T14:30:00Z",
+    "payment_method": "UPI",
+    "gateway_reference": "GATEWAY-REF-2026-001",
+    "failure_reason": null,
+    "revenue_distribution": {
+      "platform_fee": 45.00,
+      "merchant_payout": 500.00,
+      "delivery_partner_earnings": 45.00
     }
   }
 }
