@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CustomerOrderInitializationContract",
+  "description": "Defines the system input requirement schema for initializing a secure checkout transaction flow.",
+  "type": "object",
+  "required": ["customer_id", "restaurant_id", "cart_summary", "routing_coordinates"],
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "example": "CUST-99482"
+    },
+    "restaurant_id": {
+      "type": "string",
+      "example": "REST-CHAI-01"
+    },
+    "cart_summary": {
+      "type": "object",
+      "properties": {
+        "items_count": { "type": "integer", "example": 3 },
+        "basket_gross_value": { "type": "number", "example": 450.00 },
+        "tax_split_charges": { "type": "number", "example": 22.50 }
+      },
+      "required": ["items_count", "basket_gross_value"]
+    },
+    "routing_coordinates": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "example": [13.0827, 80.2707]
+    }
+  }
+}
