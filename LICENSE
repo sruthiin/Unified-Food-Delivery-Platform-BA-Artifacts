@@ -1,21 +1,10 @@
-MIT License
+# Unified Food Delivery Platform - Advanced BA Specifications Artifacts
 
-Copyright (c) 2026 sruthiin
+This repository houses the technical system configurations, database validation logic scripts, and API message contracts modeled during the requirement engineering lifecycle of the Unified Food Delivery Platform.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### 🤖 AI-Augmented Methodology
+The system blueprints, business rules validation matrix, and edge-case exceptions embedded in this architecture were accelerated using an iterative prompt framework within **NotebookLM, Claude 3.5, and Google Gemini** to satisfy rigorous Agile INVEST and PCI-DSS compliance standards.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+### 📁 Repository Structure
+* `/Database-Validations/` - Complex SQL scripts for state checking constraints.
+* `/Interface-Contracts/` - JSON schemas modeling data transfer validation points.
