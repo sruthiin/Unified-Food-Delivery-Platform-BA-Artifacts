@@ -1,0 +1,19 @@
+{
+  "title": "PaymentGatewayClearingWebhookContract",
+  "description": "Models the secure data payload incoming from third-party payment rails (UPI/Card Processors) on clearing.",
+  "type": "object",
+  "required": ["transaction_id", "order_id", "gateway_status_flag", "payout_distribution_ledger"],
+  "properties": {
+    "transaction_id": { "type": "string", "example": "TXN-UPI-FOOD-99481A" },
+    "order_id": { "type": "string", "example": "ORD-2026-88102" },
+    "gateway_status_flag": { "type": "string", "example": "SUCCESS" },
+    "payout_distribution_ledger": {
+      "type": "object",
+      "properties": {
+        "calculated_platform_revenue": { "type": "number", "example": 45.00 },
+        "calculated_merchant_payable": { "type": "number", "example": 355.00 },
+        "calculated_logistics_partner_earnings": { "type": "number", "example": 50.00 }
+      }
+    }
+  }
+}
